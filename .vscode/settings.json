@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "**/webapi1/bin": true,
+        "**/webapi1/obj": true
+    }
+}
