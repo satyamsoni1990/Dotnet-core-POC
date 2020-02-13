@@ -18,24 +18,24 @@ namespace webapi1
         public static void Main(string[] args)
         {
             var host =CreateHostBuilder(args).Build();
-                        using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<DataContext>();
-                    //var userManager = services.GetRequiredService<UserManager<User>>();
-                    //var roleManager = services.GetRequiredService<RoleManager<Role>>();
-                    context.Database.Migrate();
-                    Seed.SeedUsers(context);
-                    //Seed.SeedUsers(userManager, roleManager);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occured during migration");
-                }
-            }
+            //             using (var scope = host.Services.CreateScope())
+            // {
+            //     var services = scope.ServiceProvider;
+            //     try
+            //     {
+            //         var context = services.GetRequiredService<DataContext>();
+            //         //var userManager = services.GetRequiredService<UserManager<User>>();
+            //         //var roleManager = services.GetRequiredService<RoleManager<Role>>();
+            //         context.Database.Migrate();
+            //         Seed.SeedUsers(context);
+            //         //Seed.SeedUsers(userManager, roleManager);
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         var logger = services.GetRequiredService<ILogger<Program>>();
+            //         logger.LogError(ex, "An error occured during migration");
+            //     }
+            // }
             host.Run();
         }
 

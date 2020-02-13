@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using System.Net;
 using System.Text;
 using webapi1.Helpers;
@@ -34,22 +35,23 @@ namespace webapi1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            // services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            //  builder =>
+            //  {
+            //      builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+            //  }).EnableSensitiveDataLogging());
+           
             services.AddControllers().AddNewtonsoftJson(o =>
                 {
                     o.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
-            //  services.AddMvcCore().AddJsonOptions(o =>
-            //     {
-            //         o.SerializerSettings.ReferenceLoopHandling =
-            //             Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            //         // o.JsonSerializerOptions.PropertyNamingPolicy = null;
-            //         // o.JsonSerializerOptions.DictionaryKeyPolicy = null;
-            //     });
+
             services.AddCors();
-             services.AddAutoMapper(typeof(DatingRepository).Assembly);
+            services.AddAutoMapper(typeof(DatingRepository).Assembly);
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
+            services.AddScoped<LogUserActivity>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            .AddJwtBearer(options =>
            {
@@ -73,24 +75,25 @@ namespace webapi1
             }
             else
             {
-                app.UseExceptionHandler(builder =>
-                               {
-                                   builder.Run(async context =>
-                                   {
-                                       context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                // app.UseExceptionHandler(builder =>
+                //                {
+                //                    builder.Run(async context =>
+                //                    {
+                //                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                                       var error = context.Features.Get<IExceptionHandlerFeature>();
-                                       if (error != null)
-                                       {
-                                           context.Response.AddApplicationError(error.Error.Message);
-                                           await context.Response.WriteAsync(error.Error.Message);
-                                       }
-                                   });
-                               });
-
+                //                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                //                        if (error != null)
+                //                        {
+                //                            context.Response.AddApplicationError(error.Error.Message);
+                //                            await context.Response.WriteAsync(error.Error.Message);
+                //                        }
+                //                    });
+                //                });
+                // app.UseHsts();
             }
+            app.UseDeveloperExceptionPage();
 
-            // app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

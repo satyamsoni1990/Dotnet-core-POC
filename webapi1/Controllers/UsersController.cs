@@ -14,7 +14,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace webapi1.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(LogUserActivity))]
     [Route("api/users")]
+
     [ApiController]
 
     public class UsersController : ControllerBase

@@ -18,7 +18,7 @@ namespace webapi1.Controllers
             this._context = context;
         }
         // GET api/values
-        [Authorize]
+      
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -26,7 +26,7 @@ namespace webapi1.Controllers
             // return new string[] { "value1", "value3" };
             return Ok(values);
         }
-        [AllowAnonymous]
+        
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
